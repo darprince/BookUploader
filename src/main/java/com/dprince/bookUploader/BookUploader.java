@@ -22,10 +22,8 @@ public class BookUploader {
     public static void main(String[] args) {
         final Book book = setUpInstanceOfBook(args[0]);
 
-        boolean success = false;
         try {
-            success = checkFileExists("books/" + book.filename);
-            if (success) {
+            if (checkFileExists("books/" + book.filename)) {
                 log.info("Book exists.");
                 System.exit(0);
             }
@@ -36,10 +34,13 @@ public class BookUploader {
         log.info("getIsbnFromGoogle()");
         final List<String> potentialIsbnList = Google.getPotentialIsbnsFromGoogle(book.author,
                 book.title);
+
         DataBase.insertFromUpload(potentialIsbnList, book);
 
         if (!DataBase.checkIfBookExistsInDB(book.isbn)) {
             uploadFile(book.filename, book.fullFilename, book.isbn);
+        } else {
+            log.fatal("Book was not found in DB after insert, therefore no file upload");
         }
     }
 
@@ -115,7 +116,9 @@ public class BookUploader {
         boolean success = false;
         try {
             success = checkFileExists("books/" + filename);
+            log.info("Book uploaded successfully");
         } catch (final IOException e) {
+            log.info("Book NOT uploaded successfully");
             e.printStackTrace();
         }
 

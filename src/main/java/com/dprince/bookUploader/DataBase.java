@@ -70,15 +70,14 @@ public class DataBase {
             try {
                 final String completeBookInfo = Goodreads.getCompleteBookInfo(bookIsbn);
                 final Book finalBook = populateBook(bookIsbn, completeBookInfo, book);
-                log.info("Book is fully populated: " + finalBook.toString());
                 final boolean inserted = finalBook.insertToTable(connect);
                 if (inserted) {
+                    log.info("Book is fully populated: " + finalBook.toString() + "\n\n");
                     log.info("Inserted ISBN: " + finalBook.isbn);
                     return true;
                 }
             } catch (final Exception e) {
                 e.printStackTrace();
-                log.info("Error in insert: " + e.getMessage());
             }
         }
         return false;
