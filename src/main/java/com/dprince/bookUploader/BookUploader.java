@@ -42,6 +42,13 @@ public class BookUploader {
         } else {
             log.fatal("Book was not found in DB after insert, therefore no file upload");
         }
+
+        try {
+            System.out.println("Sleeping");
+            Thread.sleep(3000);
+        } catch (Exception e) {
+
+        }
     }
 
     /**
