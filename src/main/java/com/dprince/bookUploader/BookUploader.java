@@ -38,26 +38,28 @@ public class BookUploader {
         for (String isbn : potentialIsbnList) {
             try {
                 if (Goodreads.getGoodreadsBookInfo(isbn) == true) {
+
+                    // Add google info.
+                    Google.addGoogleInfo();
+                    log.info(book.toString());
+
+                    // Insert to database
+                    DataBase.insertFromUpload(book);
+
+                    // Check if insert was successful.
+                    if (!DataBase.checkIfBookExistsInDB(book.isbn)) {
+                        // Uplaod file to server.
+                        uploadFile(book.filename, book.fullFilename, book.isbn);
+                    } else {
+                        log.fatal(
+                                "Book was not found in DB after insert, therefore no file upload");
+                    }
+
                     break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-
-        // Add google info.
-        Google.addGoogleInfo();
-        log.info(book.toString());
-
-        // Insert to database
-        DataBase.insertFromUpload(book);
-
-        // Check if insert was successful.
-        if (!DataBase.checkIfBookExistsInDB(book.isbn)) {
-            // Uplaod file to server.
-            uploadFile(book.filename, book.fullFilename, book.isbn);
-        } else {
-            log.fatal("Book was not found in DB after insert, therefore no file upload");
         }
 
         SleepForThree();
