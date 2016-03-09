@@ -11,9 +11,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 public class DataBase {
     static Logger log = LogManager.getLogger(DataBase.class.getName());
 
@@ -24,23 +21,19 @@ public class DataBase {
      * Takes a list of ISBNs, finds one that goodreads recognizes, populates the
      * {@link Book} and inserts into table.
      *
-     * @param isbnList
-     *            List of isbns returned from google API related to the book
-     *            being queried
      * @param book
      *            {@link Book}
      * @return True if table insert succeeded, false otherwise.
      */
-    public static boolean insertFromUpload(List<String> isbnList, Book book) {
+    public static boolean insertFromUpload(Book book) {
         connectToDB();
 
-        log.info("ISBN list size: " + isbnList.size());
-        try {
-            return getBookInfoAndInsert(isbnList, book);
-        } catch (final Exception e) {
-            e.printStackTrace();
-            return false;
+        if (book.insertToTable(connect)) {
+            log.info("Book is fully populated: " + book.toString() + "\n\n");
+            log.info("Inserted ISBN: " + book.isbn);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -49,115 +42,35 @@ public class DataBase {
      *
      * @return True if Successful, false otherwise.
      */
-    public static boolean getFromDBandUpdate() {
-        connectToDB();
-
-        final List<String> isbnList = getIsbnsFromDBToQuery();
-
-        printISBNs(isbnList);
-
-        return getBookInfoAndUpdate(isbnList);
-    }
-
-    /**
-     * @param isbnList
-     *            List of isbns returned from google API.
-     * @param book
-     *            {@link Book}
-     */
-    public static boolean getBookInfoAndInsert(List<String> isbnList, Book book) {
-        for (final String bookIsbn : isbnList) {
-            try {
-                final String completeBookInfo = Goodreads.getCompleteBookInfo(bookIsbn);
-                final Book finalBook = populateBook(bookIsbn, completeBookInfo, book);
-                final boolean inserted = finalBook.insertToTable(connect);
-                if (inserted) {
-                    log.info("Book is fully populated: " + finalBook.toString() + "\n\n");
-                    log.info("Inserted ISBN: " + finalBook.isbn);
-                    return true;
-                }
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
+    // public static boolean getFromDBandUpdate() {
+    // connectToDB();
+    //
+    // final List<String> isbnList = getIsbnsFromDBToQuery();
+    //
+    // printISBNs(isbnList);
+    //
+    // return getBookInfoAndUpdate(isbnList);
+    // }
 
     /**
      * @param isbnList
      *            List of isbns returned from google API.
      * @return True if successful, false otherwise.
      */
-    public static boolean getBookInfoAndUpdate(List<String> isbnList) {
-        for (final String bookIsbn : isbnList) {
-            try {
-                final Book book = Book.getInstance();
-                final String completeBookInfo = Goodreads.getCompleteBookInfo(bookIsbn);
-                final Book finalBook = populateBook(bookIsbn, completeBookInfo, book);
-                finalBook.updateTable(connect);
-            } catch (final Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Takes a {@link JsonObject} in {@link String} form and populates
-     * {@link Book} object.
-     *
-     * @param isbn
-     * @param completeBookInfo
-     * @param book
-     *            Partially populated {@link Book}.
-     * @return Fully populated {@link Book}.
-     */
-    private static Book populateBook(String isbn, String completeBookInfo, Book book) {
-        final JsonParser parser = new JsonParser();
-        JsonObject jsonBookInfo;
-        jsonBookInfo = (JsonObject) parser.parse(completeBookInfo);
-        final JsonObject jsonBook = jsonBookInfo.get("book").getAsJsonObject();
-        final JsonObject jsonSeries = jsonBookInfo.get("series").getAsJsonObject();
-        final Integer year = jsonBook.get("year").getAsInt();
-        final Double rating = jsonBook.get("rating").getAsDouble();
-        final String goodreadsId = jsonBook.get("goodreadsId").getAsString();
-        final String title = jsonBook.get("title").getAsString();
-        final String image = jsonBook.get("image").getAsString();
-        final Integer authorId = jsonBook.get("authorID").getAsInt();
-        final String author = jsonBook.get("authorName").getAsString();
-        final Integer pages = jsonBook.get("pages").getAsInt();
-        final String synopsis = jsonBook.get("synopsis").getAsString();
-        final String genre = jsonBook.get("genres").getAsString();
-        final String googleId = jsonBook.get("googleId").getAsString();
-
-        final Integer seriesNumber = jsonSeries.get("seriesNumber").getAsInt();
-        final String seriesIdString = jsonSeries.get("seriesID").getAsString();
-
-        Integer seriesId = null;
-        if (seriesIdString.equals("") || seriesIdString == null) {
-            seriesId = 0;
-        }
-
-        if (book.author == null || book.author.equals("")) {
-            book.setAuthor(author);
-            book.setTitle(title);
-        }
-        book.setIsbn(isbn);
-        book.setAuthorId(authorId);
-        book.setRating(rating);
-        book.setSynopsis(synopsis);
-        book.setPages(pages);
-        book.setSeriesId(seriesId);
-        book.setSeriesNumber(seriesNumber);
-        book.setYear(year);
-        book.setgenre(genre);
-        book.setImage(image);
-        book.setGoogleId(googleId);
-        book.setGoodreadsId(goodreadsId);
-
-        return book;
-    }
+    // public static boolean getBookInfoAndUpdate(List<String> isbnList) {
+    // for (final String bookIsbn : isbnList) {
+    // try {
+    // final Book book = Book.getInstance();
+    // Goodreads.getGoodreadsBookInfo(bookIsbn);
+    // final Book finalBook = populateBook(bookIsbn, completeBookInfo, book);
+    // finalBook.updateTable(connect);
+    // } catch (final Exception e) {
+    // e.printStackTrace();
+    // return false;
+    // }
+    // }
+    // return true;
+    // }
 
     /**
      * Queries the database for books with needsProcessing = 1.
