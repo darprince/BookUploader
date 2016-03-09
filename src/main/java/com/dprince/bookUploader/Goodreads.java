@@ -62,6 +62,7 @@ public class Goodreads {
      */
     public static boolean parseXMLFromGoodreads(String xml, String isbn) {
 
+        System.out.println("Trying isbn: " + isbn);
         DocumentBuilder builder = null;
 
         try {
@@ -103,6 +104,8 @@ public class Goodreads {
 
             if (!book.title.equals(title) || !book.author.equals(authorName) || isbn == null
                     || isbn.equals("")) {
+                System.out.println("Book: " + book.author + " - " + book.title + " - " + isbn);
+                System.out.println(authorName + " - " + title);
                 return false;
             }
 
