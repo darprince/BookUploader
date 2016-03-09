@@ -101,7 +101,8 @@ public class Goodreads {
 
             Book book = Book.getInstance();
 
-            if (!book.title.equals(title) || !book.author.equals(authorName)) {
+            if (!book.title.equals(title) || !book.author.equals(authorName) || isbn == null
+                    || isbn.equals("")) {
                 return false;
             }
 
