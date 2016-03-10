@@ -182,7 +182,7 @@ public class Goodreads {
             final NodeList seriesNodes = seriesNode.getChildNodes();
 
             final String seriesId = getNode(seriesNodes, "id").getTextContent();
-
+            System.out.println("SeriesNum: " + seriesNumber);
             try {
                 book.setSeriesNumber(Integer.parseInt(seriesNumber));
             } catch (Exception e) {
