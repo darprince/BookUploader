@@ -182,7 +182,12 @@ public class Goodreads {
 
             final String seriesId = getNode(seriesNodes, "id").getTextContent();
 
-            book.setSeriesNumber(Integer.parseInt(seriesNumber));
+            try {
+                book.setSeriesNumber(Integer.parseInt(seriesNumber));
+            } catch (Exception e) {
+                int seriesNumberInt = (int) Double.parseDouble(seriesNumber);
+                book.setSeriesId(seriesNumberInt);
+            }
             book.setSeriesId(Integer.parseInt(seriesId));
 
         } catch (ParserConfigurationException | SAXException | NullPointerException
