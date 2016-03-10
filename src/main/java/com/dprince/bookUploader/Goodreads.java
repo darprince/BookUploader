@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -120,7 +121,21 @@ public class Goodreads {
 
             addSeriesInfoFromGoodreads(book, workId);
 
-            return true;
+            System.out.println("\n\nISBN: " + book.isbn);
+            System.out.println("Author: " + book.author + " " + book.authorId);
+            System.out.println("Title: " + book.title);
+            System.out.println("Synopsis: " + book.synopsis.substring(0, 100) + "\n\n");
+
+            Scanner in = new Scanner(System.in);
+            System.out.println("Correct?");
+            String userResponse = in.nextLine();
+            in.close();
+
+            if (userResponse.equalsIgnoreCase("y")) {
+                return true;
+            }
+
+            return false;
         } catch (ParserConfigurationException | SAXException | NullPointerException
                 | IOException e1) {
             System.out.println("Error parsing Goodreads info.");
