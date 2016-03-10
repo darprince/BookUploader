@@ -130,10 +130,13 @@ public class Goodreads {
             System.out.println("Author: " + book.author + " " + book.authorId);
             System.out.println("Title: " + book.title + "\n\n");
 
+            String userResponse = null;
             System.out.println("Correct?");
             final Scanner in2 = new Scanner(System.in);
-            final String userResponse = in2.nextLine();
-            System.out.println("You entered " + userResponse);
+            while (in2.hasNextLine()) {
+                userResponse = in2.nextLine();
+                System.out.println("You entered " + userResponse);
+            }
             in2.close();
 
             if (userResponse.equalsIgnoreCase("y")) {
