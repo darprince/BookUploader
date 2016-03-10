@@ -64,11 +64,9 @@ public class BookUploader {
 
         String userResponse = null;
         System.out.println("Would you like to add a isbn?");
+        @SuppressWarnings("resource")
         final Scanner in = new Scanner(System.in);
-        while (in.hasNextLine()) {
-            userResponse = in.nextLine();
-        }
-        in.close();
+        userResponse = in.nextLine();
         System.out.println("yep");
 
         if (userResponse.equalsIgnoreCase("n")) {
