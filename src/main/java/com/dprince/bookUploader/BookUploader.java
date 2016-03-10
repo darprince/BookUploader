@@ -40,7 +40,6 @@ public class BookUploader {
 
 					// Add google info.
 					Google.addGoogleInfo();
-					log.info(book.toString());
 
 					// Insert to database
 					DataBase.insertFromUpload(book);
