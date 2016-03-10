@@ -62,8 +62,8 @@ public class BookUploader {
             }
         }
 
-        final Scanner in = new Scanner(System.in);
         System.out.println("Would you like to add a isbn?");
+        final Scanner in = new Scanner(System.in);
         final String userResponse = in.nextLine();
         in.close();
 
