@@ -105,7 +105,8 @@ public class Goodreads {
             final Book book = Book.getInstance();
 
             if (!StringUtils.containsIgnoreCase(title, book.title)
-                    || !book.author.equals(authorName) || isbn == null || isbn.equals("")) {
+                    || !book.author.replaceAll("\\s", "").equals(authorName.replaceAll("\\s", ""))
+                    || isbn == null || isbn.equals("")) {
                 System.out.println(
                         "Rejecting Book: " + book.author + " - " + book.title + " - " + isbn);
                 System.out.println(authorName + " - " + title + "\n\n");
