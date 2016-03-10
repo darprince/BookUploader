@@ -102,7 +102,7 @@ public class Goodreads {
 
             Book book = Book.getInstance();
 
-            if (!book.title.equals(title) || !book.author.equals(authorName) || isbn == null
+            if (!title.contains(book.title) || !book.author.equals(authorName) || isbn == null
                     || isbn.equals("")) {
                 System.out.println("Book: " + book.author + " - " + book.title + " - " + isbn);
                 System.out.println(authorName + " - " + title);
