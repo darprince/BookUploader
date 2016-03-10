@@ -105,8 +105,9 @@ public class Goodreads {
 
             if (!title.contains(book.title) || !book.author.equals(authorName) || isbn == null
                     || isbn.equals("")) {
-                System.out.println("Book: " + book.author + " - " + book.title + " - " + isbn);
-                System.out.println(authorName + " - " + title);
+                System.out.println(
+                        "Rejecting Book: " + book.author + " - " + book.title + " - " + isbn);
+                System.out.println(authorName + " - " + title + "\n\n");
                 return false;
             }
 
@@ -121,6 +122,7 @@ public class Goodreads {
 
             addSeriesInfoFromGoodreads(book, workId);
 
+            System.out.println("************************************************");
             System.out.println("\n\nISBN: " + book.isbn);
             System.out.println("Author: " + book.author + " " + book.authorId);
             System.out.println("Title: " + book.title);
