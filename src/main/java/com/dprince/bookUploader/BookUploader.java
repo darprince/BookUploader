@@ -66,6 +66,7 @@ public class BookUploader {
         final Scanner in = new Scanner(System.in);
         final String userResponse = in.nextLine();
         in.close();
+        System.out.println("yep");
 
         if (userResponse.equalsIgnoreCase("n")) {
             SleepForThree();

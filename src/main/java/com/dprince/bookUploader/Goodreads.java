@@ -133,6 +133,7 @@ public class Goodreads {
             System.out.println("Correct?");
             final Scanner in2 = new Scanner(System.in);
             final String userResponse = in2.nextLine();
+            System.out.println("You entered " + userResponse);
             in2.close();
 
             if (userResponse.equalsIgnoreCase("y")) {
